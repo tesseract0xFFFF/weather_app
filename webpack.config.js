@@ -6,13 +6,14 @@ module.exports = {
   entry: {
     app: './src/app.js',
   },
- devtool: 'inline-source-map',
- devServer: {
+  devtool: 'inline-source-map',
+  devServer: {
     static: './dist',
   },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Development',
+      template: './src/index.html',
     }),
   ],
   output: {
@@ -33,19 +34,19 @@ module.exports = {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
       },
-     {
-       test: /\.(woff|woff2|eot|ttf|otf)$/i,
-       type: 'asset/resource',
-     },
-     {
-       test: /\.(?:js|mjs|cjs)$/,
-       exclude: /node_modules/,
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(?:js|mjs|cjs)$/,
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
             presets: [
-              ['@babel/preset-env', { targets: "defaults" }]
-           ]
+              ['@babel/preset-env', { targets: 'defaults' }]
+            ]
           }
         }
       }
