@@ -71,6 +71,12 @@ function createAndAppenmdIMG(src, appendTo){
   appendTo.appendChild(myImage);
 }
 
+function removeChildDivs (parent) {
+  while (parent.firstChild) {
+    parent.firstChild.remove();
+  }
+}
+
 
 ( async function () {
 
@@ -78,14 +84,28 @@ function createAndAppenmdIMG(src, appendTo){
   const searchInput = document.getElementById('search-input');
   const todaysIconArea = document.getElementById('icon');
   const todaysDescription = document.getElementById('description');
+  const forecast1 = document.getElementById('day1');
+  const forecast2 = document.getElementById('day2');
+  const forecast3 = document.getElementById('day3');
 
   searchButt.addEventListener('click', async function () {
     const unprocessedWeatherData = await getWeatherData(searchInput.value);
+    console.log(unprocessedWeatherData);
     const processedCurrentWeatherData = processDataToday(unprocessedWeatherData);
     const processedForecastData = processDataForecast(unprocessedWeatherData);
 
+
+    // remove the previous values.
+    removeChildDivs(todaysIconArea);
+    removeChildDivs(todaysDescription);
+    removeChildDivs(forecast1);
+    removeChildDivs(forecast2);
+    removeChildDivs(forecast3);
+
+
     // sets today's weather icon.
     const todaysIcon = processedCurrentWeatherData.icon;
+    setDOMElement(todaysDescription, 'Today:');
     createAndAppenmdIMG(todaysIcon,todaysIconArea);
 
     // appends today's info
@@ -95,6 +115,34 @@ function createAndAppenmdIMG(src, appendTo){
       }
     }
 
+
+    // set forecast values
+    setDOMElement(forecast1, 'Tomorrow:');
+    createAndAppenmdIMG(processedForecastData.day0.icon, forecast1);
+    setDOMElement(forecast2, 'The day after:');
+    createAndAppenmdIMG(processedForecastData.day1.icon, forecast2);
+    setDOMElement(forecast3, 'Too far away:');
+    createAndAppenmdIMG(processedForecastData.day2.icon, forecast3);
+
+    // three 'for' loops because i did not think.
+    for (const property in processedForecastData.day0){
+      if (property !== 'icon'){
+        setDOMElement(forecast1, processedForecastData.day0[property]);
+      }
+    }
+
+
+    for (const property in processedForecastData.day1){
+      if (property !== 'icon'){
+        setDOMElement(forecast2, processedForecastData.day1[property]);
+      }
+    }
+
+    for (const property in processedForecastData.day2){
+      if (property !== 'icon'){
+        setDOMElement(forecast3, processedForecastData.day2[property]);
+      }
+    }
 
 
     console.log(processedCurrentWeatherData);
